@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Dani de Darwin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            overflow-x: hidden;
+        }
+
+        .romantic-bg {
+            background-color: #ffdde1;
+            background-image: linear-gradient(315deg, #ffdde1 0%, #ee9ca7 74%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .title-font {
+            font-family: 'Pacifico', cursive;
+        }
+
+        .heart-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(255, 105, 135, 0.3);
+            z-index: 10;
+            transition: transform 0.3s ease;
+            animation: cardEntrance 1s ease-out;
+        }
+
+        @keyframes cardEntrance {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .title-animated {
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 105, 135, 0.5);
+            }
+
+            100% {
+                text-shadow: 0 0 20px rgba(255, 105, 135, 1), 0 0 30px rgba(255, 105, 135, 0.8);
+            }
+        }
+
+        .heart-float {
+            animation: heartFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes heartFloat {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-10px) rotate(5deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(0deg);
+            }
+
+            75% {
+                transform: translateY(-10px) rotate(-5deg);
+            }
+        }
+
+        .bounce-in {
+            animation: bounceIn 0.8s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+
+            70% {
+                transform: scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .photo-frame {
+            border: 3px dashed #ff6b6b;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .photo-frame:hover {
+            border-color: #ff4757;
+            background-color: #fff0f3;
+        }
+
+        #noBtn {
+            position: absolute;
+            /* start as relative so it doesn't affect layout on small screens */
+            transition: top 0.2s ease, left 0.2s ease;
+            /* Importante para que el movimiento no sea instantáneo y se vea el "escape" */
+        }
+
+        /* Animación de latido para el botón Sí */
+        @keyframes heartbeat {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse-btn {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .floating-message {
+            position: fixed;
+            pointer-events: none;
+            color: #ff4757;
+            font-weight: bold;
+            font-size: 1.2rem;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 50;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.8);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(1.2);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="romantic-bg">
+        <!-- Floating hearts background -->
+        <div class="heart-bg" id="heartBg"></div>
+
+        <div class="container mx-auto px-4 flex justify-center">
+            <div class="card p-6 sm:p-8 w-full max-w-md text-center relative" id="mainCard">
+
+                <!-- Section 1: The Question -->
+                <div id="questionSection">
+                    <h1 class="title-font text-4xl text-red-500 mb-2 title-animated">Hola Dani...</h1>
+                    <p class="text-gray-600 mb-6">Darwin tiene una pregunta importante para ti</p>
+
+                    <!-- Image Display Area -->
+                    <div class="mb-6 flex justify-center">
+                        <div
+                            class="photo-frame w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 flex items-center justify-center bg-pink-50 bounce-in mx-auto">
+                            <img id="previewImage" src="resources/dani.jpeg" class="w-full h-full object-cover"
+                                alt="Dani">
+                        </div>
+                    </div>
+
+                    <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 mb-6 sm:mb-8 px-2">¿Quieres ser mi
+                        San Valentín?
+                    </h2>
+
+                    <div class="relative h-20 sm:h-24 w-full flex justify-center gap-4 sm:gap-6 items-center flex-wrap"
+                        id="buttonContainer">
+                        <button id="yesBtn" onclick="sayYes()"
+                            class="pulse-btn bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-bold py-3 px-8 sm:py-3 sm:px-10 rounded-full shadow-lg transform transition hover:scale-110 z-20 text-base sm:text-xl">
+                            ¡SÍ! 😍
+                        </button>
+
+                        <!-- El botón NO -->
+                        <!-- Usamos style position static inicialmente para que se alinee, luego lo cambiamos a absolute -->
+                        <button id="noBtn"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-8 sm:py-3 sm:px-10 rounded-full shadow-md z-20 text-base sm:text-xl transition-all duration-100"
+                            style="position: relative;">
+                            No
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Section 2: Success Message (Hidden initially) -->
+                <div id="successSection" class="hidden flex-col items-center animate-fade-in-up">
+                    <h1 class="title-font text-2xl sm:text-4xl md:text-5xl text-red-600 mb-4 title-animated">¡Sabía que
+                        dirías que
+                        sí! ❤️</h1>
+                    <div
+                        class="w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-pink-500 shadow-xl mb-6 mx-auto relative bounce-in">
+                        <img id="finalImage" src="resources/dani.jpeg" class="w-full h-full object-cover">
+                    </div>
+                    <p class="text-lg sm:text-xl text-gray-700 mb-4 font-bold">¡Eres la mejor, Dani!</p>
+                    <p class="text-pink-500 italic">Te quiero mucho. <br>- Darwin</p>
+                    <button onclick="location.reload()"
+                        class="mt-8 text-sm text-gray-400 underline hover:text-gray-600">Volver a preguntar</button>
+                </div>
+
+            </div>
+        </div>
+
+        <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <script>
+        // --- Variables ---
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const questionSection = document.getElementById('questionSection');
+        const successSection = document.getElementById('successSection');
+        const mainCard = document.getElementById('mainCard');
+
+        // Fix mobile 100vh issues: set --vh to actual innerHeight so centering works on mobile browsers
+        function setVh() {
+            document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+        }
+        window.addEventListener('resize', setVh);
+        window.addEventListener('orientationchange', setVh);
+        setVh();
+
+        // Frases divertidas cuando intentas presionar NO
+        const funnyMessages = [
+            "¡Ups! Muy lento",
+            "¡Por aquí no!",
+            "¡Intenta de nuevo!",
+            "¿Segura Dani?",
+            "¡El otro botón!",
+            "¡Soy Darwin, di que sí!",
+            "¡No te hagas la difícil!",
+            "¡Casi me atrapas!",
+            "¡Ni lo pienses!",
+            "¡Ese botón está roto!"
+        ];
+
+        // --- Lógica del Botón Escurridizo ---
+
+        // Función para mover el botón
+        function moveButton(e) {
+            if (e) e.preventDefault();
+
+            const rect = noBtn.getBoundingClientRect();
+
+            // Convertir a fixed SIN moverlo visualmente
+            if (noBtn.style.position !== 'fixed') {
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = rect.left + 'px';
+                noBtn.style.top = rect.top + 'px';
+                noBtn.style.zIndex = '9999';
+            }
+
+            requestAnimationFrame(() => {
+                const viewportWidth = document.documentElement.clientWidth;
+                const viewportHeight = document.documentElement.clientHeight;
+
+                const btnWidth = rect.width;
+                const btnHeight = rect.height;
+
+                const margin = 20;
+
+                const maxLeft = viewportWidth - btnWidth - margin;
+                const maxTop = viewportHeight - btnHeight - margin;
+
+                // Si no hay espacio, no mover
+                if (maxLeft <= margin || maxTop <= margin) return;
+
+                const newLeft = margin + Math.random() * (maxLeft - margin);
+                const newTop = margin + Math.random() * (maxTop - margin);
+
+                noBtn.style.left = `${newLeft}px`;
+                noBtn.style.top = `${newTop}px`;
+
+                noBtn.classList.add('shake');
+                setTimeout(() => noBtn.classList.remove('shake'), 400);
+
+                showFloatingMessage(newLeft, newTop);
+                increaseYesBtnSize();
+            });
+        }
+
+        // Event Listeners para Desktop (Mouse)
+        noBtn.addEventListener('mouseover', moveButton);
+
+        // Event Listeners para Mobile (Touch)
+        // Usamos touchstart para que se mueva apenas el dedo toca la pantalla sobre el botón
+        noBtn.addEventListener('touchstart', moveButton);
+        noBtn.addEventListener('click', moveButton); // Fallback por si acaso
+
+        // Función para mostrar mensajes flotantes
+        function showFloatingMessage(x, y) {
+            const msg = document.createElement('div');
+            msg.classList.add('floating-message');
+            msg.innerText = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+
+            // Posicionar cerca del botón
+            msg.style.left = x + 'px';
+            msg.style.top = (y - 30) + 'px';
+
+            document.body.appendChild(msg);
+
+            // Eliminar elemento después de la animación
+            setTimeout(() => {
+                msg.remove();
+            }, 1000);
+        }
+
+        let currentScale = 1;
+        function increaseYesBtnSize() {
+            if (currentScale < 2) {
+                currentScale += 0.1;
+                yesBtn.style.transform = `scale(${currentScale})`;
+            }
+        }
+
+        // --- Lógica del Botón SÍ ---
+        function sayYes() {
+            // Ocultar pregunta
+            questionSection.style.display = 'none';
+            // Mostrar éxito
+            successSection.classList.remove('hidden');
+            successSection.style.display = 'flex';
+
+            // Lanzar confeti
+            startConfetti();
+        }
+
+        // --- Efecto de Confeti Simple ---
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            const numberOfPieces = 200;
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#ffeb3b', '#ff9800'];
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    p.y += p.gravity;
+                    p.rotation += p.rotationSpeed;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+                requestAnimationFrame(update);
+            }
+
+            for (let i = 0; i < numberOfPieces; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 10 + 5,
+                    gravity: Math.random() * 2 + 1,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 0.2 - 0.1,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+            update();
+        }
+
+        // Background decorations
+        function createFloatingHearts() {
+            const bg = document.getElementById('heartBg');
+            // Solo unos pocos para no saturar
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'absolute';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.opacity = '0.3';
+                heart.classList.add('heart-float');
+                bg.appendChild(heart);
+            }
+        }
+        createFloatingHearts();
+
+        // Ajustar canvas al redimensionar
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+    </script>
+</body>
+
+</html>
